@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 # If the installation flag of the Android SDK is set
 # we download the Android command-line tools,
