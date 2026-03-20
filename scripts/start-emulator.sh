@@ -39,6 +39,12 @@ else
     --device "$DEVICE_ID"
 fi
 
+# Patch device parameters
+sed -i "s/hw.lcd.width=.*/hw.lcd.width= ${AVD_WIDTH}/" /data/android.avd/config.ini && \
+sed -i "s/hw.lcd.height=.*/hw.lcd.height= ${AVD_HEIGHT}/" /data/android.avd/config.ini && \
+sed -i "s/hw.lcd.density=.*/hw.lcd.density= ${AVD_DENSITY}/" /data/android.avd/config.ini && \
+sed -i "s/hw.device.name=.*/hw.device.name= ${AVD_NAME}/" /data/android.avd/config.ini && \
+
 if [ "$OPT_SKIP_AUTH" == "true" ]; then
   AUTH_FLAG="-skip-adb-auth"
 fi

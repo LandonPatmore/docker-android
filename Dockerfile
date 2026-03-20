@@ -17,10 +17,9 @@ RUN apt update && apt install -y curl \
 
 
 # Docker labels.
-LABEL maintainer "Halim Qarroum <hqm.post@gmail.com>"
+LABEL maintainer "Landon Patmore <landon@defenseunicorns.com>"
 LABEL description "A Docker image allowing to run an Android emulator"
 LABEL version "1.0.0"
-
 
 # Arguments that can be overriden at build-time.
 ARG INSTALL_ANDROID_SDK=1
@@ -28,8 +27,14 @@ ARG API_LEVEL=33
 ARG IMG_TYPE=google_apis
 ARG ARCHITECTURE=x86_64
 ARG CMD_LINE_VERSION=9477386_latest
-ARG DEVICE_ID=pixel
+ARG DEVICE_ID=pixel_c
 ARG GPU_ACCELERATED=false
+
+# Device specific arguments
+ARG AVD_HEIGHT=1920
+ARG AVD_WIDTH=1200
+ARG AVD_DENSITY=320
+ARG AVD_NAME=generic
 
 # Environment variables.
 ENV ANDROID_SDK_ROOT=/opt/android \
@@ -42,7 +47,11 @@ ENV ANDROID_SDK_ROOT=/opt/android \
 	GPU_ACCELERATED=$GPU_ACCELERATED \
 	QTWEBENGINE_DISABLE_SANDBOX=1 \
 	ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL=10 \
-	ANDROID_AVD_HOME=/data
+	ANDROID_AVD_HOME=/data \
+	AVD_HEIGHT=$AVD_HEIGHT \
+	AVD_WIDTH=$AVD_WIDTH \
+	AVD_DENSITY=$AVD_DENSITY \
+	AVD_NAME=$AVD_NAME
 
 # Exporting environment variables to keep in the path
 # Android SDK binaries and shared libraries.
