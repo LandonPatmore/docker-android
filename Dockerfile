@@ -25,7 +25,9 @@ LABEL version "1.0.0"
 ARG INSTALL_ANDROID_SDK=1
 ARG API_LEVEL=33
 ARG IMG_TYPE=google_apis
-ARG CMD_LINE_VERSION=9477386_latest
+# Find the latest version at https://dl.google.com/android/repository/repository2-3.xml
+# Search for "cmdline-tools" to find the download URL build number.
+ARG CMD_LINE_VERSION=14742923_latest
 ARG DEVICE_ID=pixel_c
 ARG GPU_ACCELERATED=false
 
