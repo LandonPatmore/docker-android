@@ -1,4 +1,5 @@
-FROM openjdk:26-ea-21-jdk-slim
+# NOTE: Only linux/amd64 builds are supported. Android emulators require x86_64 system images.
+FROM --platform=linux/amd64 openjdk:26-ea-21-jdk-slim
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -27,6 +28,7 @@ ARG API_LEVEL=33
 ARG IMG_TYPE=google_apis
 # Find the latest version at https://dl.google.com/android/repository/repository2-3.xml
 # Search for "cmdline-tools" to find the download URL build number.
+ARG ARCHITECTURE=x86_64
 ARG CMD_LINE_VERSION=14742923_latest
 ARG DEVICE_ID=pixel_c
 ARG GPU_ACCELERATED=false
@@ -37,16 +39,14 @@ ARG AVD_WIDTH=1200
 ARG AVD_DENSITY=320
 ARG AVD_NAME=generic
 
-# Derive Android ABI from the Docker build platform (TARGETARCH is set automatically by buildx).
-ARG TARGETARCH
-ARG ARCHITECTURE=${TARGETARCH}
-
 # Environment variables.
 ENV ANDROID_SDK_ROOT=/opt/android \
 	ANDROID_PLATFORM_VERSION="platforms;android-$API_LEVEL" \
+	PACKAGE_PATH="system-images;android-${API_LEVEL};${IMG_TYPE};${ARCHITECTURE}" \
 	API_LEVEL=$API_LEVEL \
 	DEVICE_ID=$DEVICE_ID \
 	ARCHITECTURE=$ARCHITECTURE \
+	ABI=${IMG_TYPE}/${ARCHITECTURE} \
 	GPU_ACCELERATED=$GPU_ACCELERATED \
 	QTWEBENGINE_DISABLE_SANDBOX=1 \
 	ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL=10 \
@@ -84,6 +84,7 @@ COPY keys/* /root/.android/
 COPY scripts/install-sdk.sh /opt/
 RUN chmod +x /opt/install-sdk.sh
 RUN /opt/install-sdk.sh
+
 
 # Copy the container scripts in the image.
 COPY scripts/start-emulator.sh /opt/
